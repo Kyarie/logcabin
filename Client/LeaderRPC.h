@@ -121,6 +121,12 @@ class LeaderRPCBase {
                         google::protobuf::Message& response,
                         TimePoint timeout) = 0;
 
+    virtual Status callLocal(OpCode opCode,
+                const google::protobuf::Message& request,
+                google::protobuf::Message& response,
+                TimePoint timeout,
+                Server::Globals globals)
+
     /**
      * An asynchronous version of call(). This allows multiple RPCs to be
      * executed concurrently, or canceling an RPC that is running on a separate
@@ -249,6 +255,12 @@ class LeaderRPC : public LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout);
+
+    Status callLocal(OpCode opCode,
+                const google::protobuf::Message& request,
+                google::protobuf::Message& response,
+                TimePoint timeout,
+                Server::Globals globals)
 
     /// See LeaderRPCBase::makeCall().
     std::unique_ptr<LeaderRPCBase::Call> makeCall();

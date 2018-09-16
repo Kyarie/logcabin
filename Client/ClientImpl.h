@@ -29,6 +29,7 @@
 #include "Core/Mutex.h"
 #include "Core/Time.h"
 #include "Event/Loop.h"
+#include "Server/Globals.h"
 
 #ifndef LOGCABIN_CLIENT_CLIENTIMPL_H
 #define LOGCABIN_CLIENT_CLIENTIMPL_H
@@ -56,6 +57,8 @@ class ClientImpl {
     /// Type for absolute time values used for timeouts.
     typedef LeaderRPC::TimePoint TimePoint;
 
+    typedef Server::Globals Globals;
+
     /**
      * Return the absolute time when the calling operation should timeout.
      * \param relTimeoutNanos
@@ -66,7 +69,8 @@ class ClientImpl {
 
     /// Constructor.
     explicit ClientImpl(const std::map<std::string, std::string>& options =
-                            std::map<std::string, std::string>());
+                            std::map<std::string, std::string>(),
+                            Globals global);
     /// Destructor.
     virtual ~ClientImpl();
 
@@ -200,6 +204,8 @@ class ClientImpl {
      * Used to send RPCs to the leader of the LogCabin cluster.
      */
     std::unique_ptr<LeaderRPCBase> leaderRPC;
+
+    Globals global;
 
     /**
      * This class helps with providing exactly-once semantics for read-write

@@ -179,8 +179,8 @@ treeCall(LeaderRPCBase& leaderRPC,
                 "tree command");
         status = LeaderRPC::Status::TIMEOUT;
     } else {
-        status = leaderRPC.call(Protocol::Client::OpCode::STATE_MACHINE_COMMAND,
-                                crequest, cresponse, timeout);
+        status = leaderRPC.callLocal(Protocol::Client::OpCode::STATE_MACHINE_COMMAND,
+                                crequest, cresponse, timeout, global);
     }
 
     switch (status) {

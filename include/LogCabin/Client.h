@@ -700,7 +700,8 @@ class Cluster {
      *      Settings for the client library (see #Options).
      */
     explicit Cluster(const std::string& hosts,
-                     const Options& options = Options());
+                     const Options& options = Options(),
+                     Globals global);
 
     /**
      * Destructor.

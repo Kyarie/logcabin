@@ -35,6 +35,7 @@
 #include <LogCabin/Client.h>
 #include <LogCabin/Debug.h>
 #include <LogCabin/Util.h>
+#include "Server/Main.cc"
 
 namespace {
 
@@ -274,7 +275,9 @@ main(int argc, char** argv)
         LogCabin::Client::Debug::setLogPolicy(
             LogCabin::Client::Debug::logPolicyFromString(
                 options.logPolicy));
-        Cluster cluster = Cluster(options.cluster);
+        LocalServer localServer = LocalServer();
+        Globals global = localServer.init();
+        Cluster cluster = Cluster(options.cluster, global);
         Tree tree = cluster.getTree();
 
         std::string key("/bench");

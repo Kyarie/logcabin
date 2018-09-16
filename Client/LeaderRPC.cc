@@ -201,6 +201,20 @@ LeaderRPC::call(OpCode opCode,
     }
 }
 
+LeaderRPC::callLocal(OpCode opCode,
+                const google::protobuf::Message& request,
+                google::protobuf::Message& response,
+                TimePoint timeout,
+                Server::Globals globals)
+{
+    while (true) {
+        Call c(*this);
+        c.start(opCode, request, timeout);
+        globals.clientService->stateMachineQuery(rpc);
+        return Status::OK;
+    }
+}
+
 std::unique_ptr<LeaderRPCBase::Call>
 LeaderRPC::makeCall()
 {

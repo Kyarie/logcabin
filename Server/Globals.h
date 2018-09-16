@@ -206,6 +206,11 @@ class Globals {
      */
     std::shared_ptr<Server::StateMachine> stateMachine;
 
+        /**
+     * The application-facing facing RPC service.
+     */
+    std::shared_ptr<Server::ClientService> clientService;
+
   private:
 
     /**
@@ -218,11 +223,6 @@ class Globals {
      * Service used to communicate between servers.
      */
     std::shared_ptr<Server::RaftService> raftService;
-
-    /**
-     * The application-facing facing RPC service.
-     */
-    std::shared_ptr<Server::ClientService> clientService;
 
     /**
      * Listens for inbound RPCs and passes them off to the services.
