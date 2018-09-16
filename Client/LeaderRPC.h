@@ -24,6 +24,7 @@
 #include "Core/ConditionVariable.h"
 #include "RPC/Address.h"
 #include "RPC/ClientRPC.h"
+#include "Server/Globals.h"
 
 #ifndef LOGCABIN_CLIENT_LEADERRPC_H
 #define LOGCABIN_CLIENT_LEADERRPC_H
@@ -64,6 +65,7 @@ class LeaderRPCBase {
     typedef RPC::ClientRPC::Clock Clock;
     /// Type for absolute time values used for timeouts.
     typedef RPC::ClientRPC::TimePoint TimePoint;
+    typedef LogCabin::Server::Globals Globals;
 
     /**
      * RPC operation code.
@@ -125,7 +127,7 @@ class LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                Server::Globals globals)
+                Globals globals);
 
     /**
      * An asynchronous version of call(). This allows multiple RPCs to be
@@ -229,6 +231,7 @@ class LeaderRPCBase {
  */
 class LeaderRPC : public LeaderRPCBase {
   public:
+    typedef LogCabin::Server::Globals Globals;
     /**
      * Constructor.
      * \param hosts
@@ -260,7 +263,7 @@ class LeaderRPC : public LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                Server::Globals globals)
+                Globals globals);
 
     /// See LeaderRPCBase::makeCall().
     std::unique_ptr<LeaderRPCBase::Call> makeCall();

@@ -205,7 +205,7 @@ LeaderRPC::callLocal(OpCode opCode,
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                Server::Globals globals)
+                LogCabin::Server::Globals globals)
 {
     while (true) {
         Call c(*this);

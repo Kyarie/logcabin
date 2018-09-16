@@ -56,8 +56,7 @@ class ClientImpl {
     typedef LeaderRPC::Clock Clock;
     /// Type for absolute time values used for timeouts.
     typedef LeaderRPC::TimePoint TimePoint;
-
-    typedef Server::Globals Globals;
+    typedef LogCabin::Server::Globals Globals;
 
     /**
      * Return the absolute time when the calling operation should timeout.
@@ -68,9 +67,9 @@ class ClientImpl {
     static TimePoint absTimeout(uint64_t relTimeoutNanos);
 
     /// Constructor.
-    explicit ClientImpl(const std::map<std::string, std::string>& options =
-                            std::map<std::string, std::string>(),
-                            Globals global);
+    explicit ClientImpl(Globals globals,
+        const std::map<std::string, std::string>& options =
+                            std::map<std::string, std::string>());
     /// Destructor.
     virtual ~ClientImpl();
 
@@ -195,6 +194,8 @@ class ClientImpl {
      */
     Backoff sessionCreationBackoff;
 
+    Globals globals;
+
     /**
      * Describes the hosts in the cluster.
      */
@@ -205,7 +206,7 @@ class ClientImpl {
      */
     std::unique_ptr<LeaderRPCBase> leaderRPC;
 
-    Globals global;
+    typedef LogCabin::Server::Globals global;
 
     /**
      * This class helps with providing exactly-once semantics for read-write

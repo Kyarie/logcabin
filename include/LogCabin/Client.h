@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 
+#include "Server/Globals.h"
+
 #ifndef LOGCABIN_INCLUDE_LOGCABIN_CLIENT_H
 #define LOGCABIN_INCLUDE_LOGCABIN_CLIENT_H
 
@@ -670,6 +672,7 @@ class Cluster {
      *      the same order of magnitude.
      */
     typedef std::map<std::string, std::string> Options;
+    typedef LogCabin::Server::Globals Globals;
 
     /**
      * Construct a Cluster object for testing purposes only. Instead of
@@ -700,8 +703,8 @@ class Cluster {
      *      Settings for the client library (see #Options).
      */
     explicit Cluster(const std::string& hosts,
-                     const Options& options = Options(),
-                     Globals global);
+                    Globals globals,
+                    const Options& options = Options());
 
     /**
      * Destructor.

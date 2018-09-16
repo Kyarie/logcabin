@@ -285,7 +285,7 @@ class LocalServer {
             OptionParser options(argc, argv);
 
             if (options.testConfig) {
-                Server::Globals globals;
+                LogCabin::Server::Globals globals;
                 globals.config.readFile(options.configFilename.c_str());
                 // The following settings are required, and Config::read() throws
                 // an exception with an OK error message if they aren't found:
@@ -331,7 +331,7 @@ class LocalServer {
 
             {
                 // Initialize and run Globals.
-                Server::Globals globals;
+                LogCabin::Server::Globals globals;
                 globals.config.readFile(options.configFilename.c_str());
 
                 // Set debug log policy.

@@ -180,7 +180,7 @@ treeCall(LeaderRPCBase& leaderRPC,
         status = LeaderRPC::Status::TIMEOUT;
     } else {
         status = leaderRPC.callLocal(Protocol::Client::OpCode::STATE_MACHINE_COMMAND,
-                                crequest, cresponse, timeout, global);
+                                crequest, cresponse, timeout, globals);
     }
 
     switch (status) {
@@ -436,8 +436,10 @@ ClientImpl::absTimeout(uint64_t relTimeoutNanos)
         return then;
 }
 
-ClientImpl::ClientImpl(const std::map<std::string, std::string>& options)
+ClientImpl::ClientImpl(LogCabin::Server::Globals globals, 
+    const std::map<std::string, std::string>& options)
     : config(options)
+    , globals(globals)
     , eventLoop()
     , clusterUUID()
     , sessionManager(eventLoop, config)

@@ -36,6 +36,7 @@
 #include <LogCabin/Debug.h>
 #include <LogCabin/Util.h>
 #include "Server/Main.cc"
+#include "Server/Globals.h"
 
 namespace {
 
@@ -276,7 +277,7 @@ main(int argc, char** argv)
             LogCabin::Client::Debug::logPolicyFromString(
                 options.logPolicy));
         LocalServer localServer = LocalServer();
-        Globals global = localServer.init();
+        LogCabin::Server::Globals global = localServer.init();
         Cluster cluster = Cluster(options.cluster, global);
         Tree tree = cluster.getTree();
 
