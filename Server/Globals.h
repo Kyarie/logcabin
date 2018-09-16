@@ -230,7 +230,7 @@ class Globals {
     std::unique_ptr<RPC::Server> rpcServer;
 
     // Globals is non-copyable.
-    Globals(const Globals&) = delete;
+    //Globals(const Globals&) = delete;
     Globals& operator=(const Globals&) = delete;
 
 }; // class Globals
