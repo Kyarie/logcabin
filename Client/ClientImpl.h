@@ -70,6 +70,11 @@ class ClientImpl {
     explicit ClientImpl(Globals globals,
         const std::map<std::string, std::string>& options =
                             std::map<std::string, std::string>());
+
+    /// Constructor.
+    explicit ClientImpl(const std::map<std::string, std::string>& options =
+                            std::map<std::string, std::string>());
+
     /// Destructor.
     virtual ~ClientImpl();
 

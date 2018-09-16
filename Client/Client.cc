@@ -517,9 +517,20 @@ Cluster::Cluster(std::shared_ptr<TestingCallbacks> testingCallbacks,
 }
 
 Cluster::Cluster(const std::string& hosts,
-                Globals globals,
+                LogCabin::Server::Globals globals,
                 const std::map<std::string, std::string>& options)
     : clientImpl(globals, std::make_shared<ClientImpl>(options))
+{
+#if DEBUG // for testing purposes only
+    if (hosts == "-MOCK-SKIP-INIT-")
+        return;
+#endif
+    clientImpl->init(hosts);
+}
+
+Cluster::Cluster(const std::string& hosts,
+                const std::map<std::string, std::string>& options)
+    : clientImpl(std::make_shared<ClientImpl>(options))
 {
 #if DEBUG // for testing purposes only
     if (hosts == "-MOCK-SKIP-INIT-")

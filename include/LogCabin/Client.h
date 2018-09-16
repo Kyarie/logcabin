@@ -706,6 +706,9 @@ class Cluster {
                     Globals globals,
                     const Options& options = Options());
 
+    explicit Cluster(const std::string& hosts,
+                const Options& options = Options());
+
     /**
      * Destructor.
      */

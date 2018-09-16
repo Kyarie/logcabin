@@ -460,6 +460,28 @@ ClientImpl::ClientImpl(LogCabin::Server::Globals globals,
         clusterUUID.set(uuid);
 }
 
+ClientImpl::ClientImpl(const std::map<std::string, std::string>& options)
+    : config(options)
+    , eventLoop()
+    , clusterUUID()
+    , sessionManager(eventLoop, config)
+    , sessionCreationBackoff(5,                   // 5 new connections per
+                             100UL * 1000 * 1000) // 100 ms
+    , hosts()
+    , leaderRPC()             // set in init()
+    , exactlyOnceRPCHelper(this)
+    , eventLoopThread()
+{
+    NOTICE("Configuration settings:\n"
+           "# begin config\n"
+           "%s"
+           "# end config",
+           Core::StringUtil::toString(config).c_str());
+    std::string uuid = config.read("clusterUUID", std::string(""));
+    if (!uuid.empty())
+        clusterUUID.set(uuid);
+}
+
 ClientImpl::~ClientImpl()
 {
     exactlyOnceRPCHelper.exit();
