@@ -514,11 +514,16 @@ class Tree {
     Result
     write(const std::string& path, const std::string& contents);
 
+    Result writeLocal(const std::string& path, const std::string& contents);
+
     /**
      * Like write but throws exceptions upon errors.
      */
     void
     writeEx(const std::string& path, const std::string& contents);
+
+    void
+    writeExLocal(const std::string& path, const std::string& contents);
 
     /**
      * Get the value of a file.

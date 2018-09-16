@@ -179,6 +179,49 @@ treeCall(LeaderRPCBase& leaderRPC,
                 "tree command");
         status = LeaderRPC::Status::TIMEOUT;
     } else {
+        status = leaderRPC.call(Protocol::Client::OpCode::STATE_MACHINE_COMMAND,
+                            crequest, cresponse, timeout);
+    }
+
+    switch (status) {
+        case LeaderRPC::Status::OK:
+            response = *cresponse.mutable_tree();
+            VERBOSE("Reply to read-write tree command:\n%s",
+                    Core::StringUtil::trim(
+                        Core::ProtoBuf::dumpString(response)).c_str());
+            break;
+        case LeaderRPC::Status::TIMEOUT:
+            response.set_status(Protocol::Client::Status::TIMEOUT);
+            response.set_error("Client-specified timeout elapsed");
+            VERBOSE("Timeout elapsed on read-write tree command");
+            break;
+        case LeaderRPC::Status::INVALID_REQUEST:
+            PANIC("The server and/or replicated state machine doesn't support "
+                  "the read-write tree command or claims the request is "
+                  "malformed. Request is: %s",
+                  Core::ProtoBuf::dumpString(request).c_str());
+    }
+}
+
+void
+treeCall(LeaderRPCBase& leaderRPC,
+         const Protocol::Client::ReadWriteTree::Request& request,
+         Protocol::Client::ReadWriteTree::Response& response,
+         ClientImpl::TimePoint timeout,
+         LogCabin::Server::Globals globals)
+{
+    VERBOSE("Calling read-write tree command with request:\n%s",
+            Core::StringUtil::trim(
+                Core::ProtoBuf::dumpString(request)).c_str());
+    Protocol::Client::StateMachineCommand::Request crequest;
+    Protocol::Client::StateMachineCommand::Response cresponse;
+    *crequest.mutable_tree() = request;
+    LeaderRPC::Status status;
+    if (request.exactly_once().client_id() == 0) {
+        VERBOSE("Already timed out on establishing session for read-write "
+                "tree command");
+        status = LeaderRPC::Status::TIMEOUT;
+    } else {
         status = leaderRPC.callLocal(Protocol::Client::OpCode::STATE_MACHINE_COMMAND,
                                 crequest, cresponse, timeout, globals);
     }
@@ -802,6 +845,31 @@ ClientImpl::write(const std::string& path,
     treeCall(*leaderRPC,
              request, response, timeout);
     exactlyOnceRPCHelper.doneWithRPC(request.exactly_once());
+    if (response.status() != Protocol::Client::Status::OK)
+        return treeError(response);
+    return Result();
+}
+
+Result
+ClientImpl::writeLocal(const std::string& path,
+                  const std::string& workingDirectory,
+                  const std::string& contents,
+                  const Condition& condition,
+                  TimePoint timeout)
+{
+    std::string realPath;
+    Result result = canonicalize(path, workingDirectory, realPath);
+    if (result.status != Status::OK)
+        return result;
+    Protocol::Client::ReadWriteTree::Request request;
+    *request.mutable_exactly_once() =
+        exactlyOnceRPCHelper.getRPCInfo(timeout);
+    setCondition(request, condition);
+    request.mutable_write()->set_path(realPath);
+    request.mutable_write()->set_contents(contents);
+    Protocol::Client::ReadWriteTree::Response response;
+    treeCall(*leaderRPC,
+             request, response, timeout, globals);
     if (response.status() != Protocol::Client::Status::OK)
         return treeError(response);
     return Result();

@@ -427,10 +427,28 @@ Tree::write(const std::string& path, const std::string& contents)
         ClientImpl::absTimeout(treeDetails->timeoutNanos));
 }
 
+Result
+Tree::writeLocal(const std::string& path, const std::string& contents)
+{
+    std::shared_ptr<const TreeDetails> treeDetails = getTreeDetails();
+    return treeDetails->clientImpl->writeLocal(
+        path,
+        treeDetails->workingDirectory,
+        contents,
+        treeDetails->condition,
+        ClientImpl::absTimeout(treeDetails->timeoutNanos));
+}
+
 void
 Tree::writeEx(const std::string& path, const std::string& contents)
 {
     throwException(write(path, contents), treeDetails->timeoutNanos);
+}
+
+void
+Tree::writeExLocal(const std::string& path, const std::string& contents)
+{
+    throwException(writeLocal(path, contents), treeDetails->timeoutNanos);
 }
 
 Result
@@ -519,7 +537,7 @@ Cluster::Cluster(std::shared_ptr<TestingCallbacks> testingCallbacks,
 Cluster::Cluster(const std::string& hosts,
                 LogCabin::Server::Globals globals,
                 const std::map<std::string, std::string>& options)
-    : clientImpl(globals, std::make_shared<ClientImpl>(options))
+    : clientImpl(std::make_shared<ClientImpl>(globals, options))
 {
 #if DEBUG // for testing purposes only
     if (hosts == "-MOCK-SKIP-INIT-")

@@ -227,7 +227,7 @@ writeThreadMain(uint64_t id,
     for (uint64_t i = 0; i < numWrites; ++i) {
         if (exit)
             break;
-        tree.writeEx(key, value);
+        tree.writeExLocal(key, value);
         writesDone = i + 1;
     }
 }
