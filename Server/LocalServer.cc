@@ -112,7 +112,6 @@ class LocalServer {
 
     LogCabin::Server::Globals * init(std::string configFilename, bool bootstrap) {
         using namespace LogCabin;
-        using LogCabin::Server::Globals;
 
         try {
             Core::ThreadId::setName("evloop");
@@ -123,7 +122,7 @@ class LocalServer {
             // Write PID file, removed upon destruction
             PidFile pidFile(pidFilename);
             pidFile.writePid(getpid());
-            Server::Globals * globals = new LogCabin::Server::Globals();
+            Server::Globals * globals = new Server::Globals();
             // Initialize and run Globals.
             globals->config.readFile(configFilename.c_str());
 
