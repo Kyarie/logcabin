@@ -708,7 +708,7 @@ class Cluster {
      *      Settings for the client library (see #Options).
      */
     explicit Cluster(const std::string& hosts,
-                    Globals globals,
+                    Globals * globals,
                     const Options& options = Options());
 
     explicit Cluster(const std::string& hosts,

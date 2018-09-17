@@ -23,9 +23,14 @@
 #include "Protocol/Common.h"
 #include "RPC/ClientSession.h"
 #include "RPC/ClientRPC.h"
+#include "Core/ProtoBuf.h"
+#include "RPC/Protocol.h"
+
 
 namespace LogCabin {
 namespace Client {
+
+using RPC::Protocol::RequestHeaderVersion1;
 
 //// class LeaderRPCBase ////
 
@@ -201,16 +206,22 @@ LeaderRPC::call(OpCode opCode,
     }
 }
 
-LeaderRPC::callLocal(OpCode opCode,
+LeaderRPC::Status LeaderRPC::callLocal(OpCode opCode,
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                LogCabin::Server::Globals globals)
+                LogCabin::Server::Globals * globals)
 {
     while (true) {
-        Call c(*this);
-        c.start(opCode, request, timeout);
-        globals.clientService->stateMachineQuery(rpc);
+        LogCabin::RPC::OpaqueServerRPC opaqueRPC;
+        Core::ProtoBuf::serialize(request, opaqueRPC.request, sizeof(RequestHeaderVersion1));
+
+        //opaqueServerRPC.responseTarget = &rpcHandler.nextResponse;
+        LogCabin::RPC::ServerRPC serverRPC;
+        serverRPC.setRequestLocal(opCode, true, std::move(opaqueRPC));
+        //serverRPC.opaqueRPC = std::move(opaqueServerRPC);
+        //serverRPC.active = true;
+        globals->clientService->handleRPC(std::move(serverRPC));
         return Status::OK;
     }
 }

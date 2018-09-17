@@ -63,6 +63,8 @@ class ServerRPC {
      */
     ServerRPC& operator=(ServerRPC&& other);
 
+    void setRequestLocal(uint16_t opCode, bool active, OpaqueServerRPC opaqueRPC);
+
     /**
      * Returns whether this RPC is waiting for a reply.
      * \return

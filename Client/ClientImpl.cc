@@ -208,7 +208,7 @@ treeCall(LeaderRPCBase& leaderRPC,
          const Protocol::Client::ReadWriteTree::Request& request,
          Protocol::Client::ReadWriteTree::Response& response,
          ClientImpl::TimePoint timeout,
-         LogCabin::Server::Globals globals)
+         LogCabin::Server::Globals * globals)
 {
     VERBOSE("Calling read-write tree command with request:\n%s",
             Core::StringUtil::trim(
@@ -479,7 +479,7 @@ ClientImpl::absTimeout(uint64_t relTimeoutNanos)
         return then;
 }
 
-ClientImpl::ClientImpl(LogCabin::Server::Globals globals, 
+ClientImpl::ClientImpl(LogCabin::Server::Globals * globals, 
     const std::map<std::string, std::string>& options)
     : config(options)
     , globals(globals)

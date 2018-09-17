@@ -67,7 +67,7 @@ class ClientImpl {
     static TimePoint absTimeout(uint64_t relTimeoutNanos);
 
     /// Constructor.
-    explicit ClientImpl(Globals globals,
+    explicit ClientImpl(Globals * globals,
         const std::map<std::string, std::string>& options =
                             std::map<std::string, std::string>());
 
@@ -205,7 +205,7 @@ class ClientImpl {
      */
     Backoff sessionCreationBackoff;
 
-    Globals globals;
+    Globals * globals;
 
     /**
      * Describes the hosts in the cluster.
@@ -216,8 +216,6 @@ class ClientImpl {
      * Used to send RPCs to the leader of the LogCabin cluster.
      */
     std::unique_ptr<LeaderRPCBase> leaderRPC;
-
-    typedef LogCabin::Server::Globals global;
 
     /**
      * This class helps with providing exactly-once semantics for read-write

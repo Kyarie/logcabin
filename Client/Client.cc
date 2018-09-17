@@ -535,7 +535,7 @@ Cluster::Cluster(std::shared_ptr<TestingCallbacks> testingCallbacks,
 }
 
 Cluster::Cluster(const std::string& hosts,
-                LogCabin::Server::Globals globals,
+                LogCabin::Server::Globals * globals,
                 const std::map<std::string, std::string>& options)
     : clientImpl(std::make_shared<ClientImpl>(globals, options))
 {

@@ -25,6 +25,9 @@
 #include "RPC/Address.h"
 #include "RPC/ClientRPC.h"
 #include "Server/Globals.h"
+#include "Server/ClientService.h"
+#include "RPC/OpaqueServerRPC.h"
+#include "RPC/ServerRPC.h"
 
 #ifndef LOGCABIN_CLIENT_LEADERRPC_H
 #define LOGCABIN_CLIENT_LEADERRPC_H
@@ -127,7 +130,7 @@ class LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                Globals globals);
+                Globals * globals) = 0;
 
     /**
      * An asynchronous version of call(). This allows multiple RPCs to be
@@ -263,7 +266,7 @@ class LeaderRPC : public LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                Globals globals);
+                Globals * globals);
 
     /// See LeaderRPCBase::makeCall().
     std::unique_ptr<LeaderRPCBase::Call> makeCall();

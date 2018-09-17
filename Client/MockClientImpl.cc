@@ -19,6 +19,7 @@
 #include "Core/STLUtil.h"
 #include "Client/MockClientImpl.h"
 #include "Tree/ProtoBuf.h"
+#include "Server/Globals.h"
 
 namespace LogCabin {
 namespace Client {
@@ -44,6 +45,7 @@ struct RAIISwap {
 };
 
 typedef RAIISwap<std::shared_ptr<TestingCallbacks>> CallbackSwap;
+typedef LogCabin::Server::Globals Globals;
 
 /**
  * This class intercepts LeaderRPC calls from ClientImpl.
@@ -108,6 +110,14 @@ class TreeLeaderRPC : public LeaderRPCBase {
         PANIC("Unexpected request: %d %s",
               opCode,
               Core::ProtoBuf::dumpString(request).c_str());
+    }
+
+    Status callLocal(OpCode opCode,
+                const google::protobuf::Message& request,
+                google::protobuf::Message& response,
+                TimePoint timeout,
+                Globals * globals) { 
+        return Status::OK;
     }
 
     class Call : public LeaderRPCBase::Call {

@@ -97,6 +97,12 @@ ServerRPC::operator=(ServerRPC&& other)
     return *this;
 }
 
+void ServerRPC::setRequestLocal(uint16_t opCode, bool active, LogCabin::RPC::OpaqueServerRPC opaqueRPC) {
+    this->opCode = opCode;
+    this->active = active;
+    this->opaqueRPC = std::move(opaqueRPC);
+}
+
 bool
 ServerRPC::getRequest(google::protobuf::Message& request)
 {

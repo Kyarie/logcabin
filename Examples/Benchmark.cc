@@ -35,7 +35,7 @@
 #include <LogCabin/Client.h>
 #include <LogCabin/Debug.h>
 #include <LogCabin/Util.h>
-#include "Server/Main.cc"
+#include "Server/LocalServer.cc"
 #include "Server/Globals.h"
 
 namespace {
@@ -56,6 +56,7 @@ class OptionParser {
         , argv(argv)
         , cluster("logcabin:5254")
         , logPolicy("")
+        , configFilename("logcabin.conf")
         , size(1024)
         , writers(1)
         , totalWrites(1000)
@@ -71,6 +72,7 @@ class OptionParser {
                {"writes",  required_argument, NULL, 'w'},
                {"verbose",  no_argument, NULL, 'v'},
                {"verbosity",  required_argument, NULL, 256},
+               {"config",  required_argument, NULL, 'f'},
                {0, 0, 0, 0}
             };
             int c = getopt_long(argc, argv, "c:hs:t:w:v", longOptions, NULL);
@@ -103,6 +105,9 @@ class OptionParser {
                     break;
                 case 256:
                     logPolicy = optarg;
+                    break;
+                case 'f':
+                    configFilename = optarg;
                     break;
                 case '?':
                 default:
@@ -188,6 +193,7 @@ class OptionParser {
     char**& argv;
     std::string cluster;
     std::string logPolicy;
+    std::string configFilename;
     uint64_t size;
     uint64_t writers;
     uint64_t totalWrites;
@@ -271,14 +277,15 @@ int
 main(int argc, char** argv)
 {
     try {
+        using LogCabin::Server::Globals;
 
         OptionParser options(argc, argv);
         LogCabin::Client::Debug::setLogPolicy(
             LogCabin::Client::Debug::logPolicyFromString(
                 options.logPolicy));
         LocalServer localServer = LocalServer();
-        LogCabin::Server::Globals global = localServer.init();
-        Cluster cluster = Cluster(options.cluster, global);
+        LogCabin::Server::Globals * globals = localServer.init(options.configFilename, false);
+        Cluster cluster = Cluster(options.cluster, globals);
         Tree tree = cluster.getTree();
 
         std::string key("/bench");
@@ -311,6 +318,8 @@ main(int argc, char** argv)
                   << totalWritesDone
                   << " objects"
                   << std::endl;
+
+        delete globals;
         return 0;
 
     } catch (const LogCabin::Client::Exception& e) {
