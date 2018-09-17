@@ -10,15 +10,6 @@ src = [
     "MockClientImpl.cc",
     "SessionManager.cc",
     "Util.cc",
-    "../Server/Globals.cc",
-    "../Server/ClientService.cc",
-    "../Server/ControlService.cc",
-    "../Server/Globals.cc",
-    "../Server/RaftConsensus.cc",
-    "../Server/RaftConsensusInvariants.cc",
-    "../Server/RaftService.cc",
-    "../Server/ServerStats.cc",
-    "../Server/StateMachine.cc",
 ]
 object_files['Client'] = env.StaticObject(src)
 

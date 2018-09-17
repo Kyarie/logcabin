@@ -64,6 +64,15 @@ LeaderRPCMock::call(OpCode opCode,
     return Status::OK;
 }
 
+LeaderRPCMock::Status
+LeaderRPCMock::callLocal(OpCode opCode,
+            const google::protobuf::Message& request,
+            google::protobuf::Message& response,
+            TimePoint timeout,
+            LogCabin::Server::Globals * globals) { 
+    return Status::OK;
+}
+
 LeaderRPCMock::Call::Call(LeaderRPCMock& leaderRPC)
     : leaderRPC(leaderRPC)
     , canceled(false)

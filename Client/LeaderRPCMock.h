@@ -35,6 +35,7 @@ namespace Client {
 class LeaderRPCMock : public LeaderRPCBase {
   public:
     typedef std::unique_ptr<google::protobuf::Message> MessagePtr;
+    typedef LogCabin::Server::Globals Globals;
     /// Constructor.
     LeaderRPCMock();
     /// Destructor.
@@ -59,6 +60,13 @@ class LeaderRPCMock : public LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout);
+
+    Status callLocal(OpCode opCode,
+                const google::protobuf::Message& request,
+                google::protobuf::Message& response,
+                TimePoint timeout,
+                Globals * globals);
+
 
     /// See LeaderRPCBase::makeCall.
     std::unique_ptr<LeaderRPCBase::Call> makeCall();

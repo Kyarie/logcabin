@@ -256,6 +256,9 @@ clientlib = env.StaticLibrary("build/logcabin",
                    object_files['Protocol'] +
                    object_files['RPC'] +
                    object_files['Event'] +
+                   object_files['Core'] +
+                   object_files['Server'] +
+                   object_files['Storage'] +
                    object_files['Core']))
 env.Default(clientlib)
 
