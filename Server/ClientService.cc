@@ -155,7 +155,7 @@ ClientService::stateMachineCommand(RPC::ServerRPC rpc)
     Core::Buffer cmdBuffer;
     rpc.getRequest(cmdBuffer);
     std::pair<Result, uint64_t> result = globals.raft->replicate(cmdBuffer);
-    if (result.first == Result::RETRY || result.first == Result::NOT_LEADER) {
+    /*if (result.first == Result::RETRY || result.first == Result::NOT_LEADER) {
         Protocol::Client::Error error;
         error.set_error_code(Protocol::Client::Error::NOT_LEADER);
         std::string leaderHint = globals.raft->getLeaderHint();
@@ -163,13 +163,13 @@ ClientService::stateMachineCommand(RPC::ServerRPC rpc)
             error.set_leader_hint(leaderHint);
         rpc.returnError(error);
         return;
-    }
-    assert(result.first == Result::SUCCESS);
-    uint64_t logIndex = result.second;
+    }*/
+    //assert(result.first == Result::SUCCESS);
+    /*uint64_t logIndex = result.second;
     if (!globals.stateMachine->waitForResponse(logIndex, request, response)) {
         rpc.rejectInvalidRequest();
         return;
-    }
+    }*/
     rpc.reply(response);
 }
 

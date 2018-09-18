@@ -293,6 +293,9 @@ main(int argc, char** argv)
         std::string key("/bench");
         std::string value(options.size, 'v');
 
+        int temp;
+        std::cin >> temp;
+
         uint64_t startNanos = timeNanos();
         std::atomic<bool> exit(false);
         std::vector<uint64_t> writesDonePerThread(options.writers);
@@ -313,7 +316,7 @@ main(int argc, char** argv)
         exit = true;
         timer.join();
 
-        tree.removeFile(key);
+        //tree.removeFile(key);
         std::cout << "Benchmark took "
                   << static_cast<double>(endNanos - startNanos) / 1e6
                   << " ms to write "
@@ -322,7 +325,8 @@ main(int argc, char** argv)
                   << std::endl;
 
         serverThread.join();
-        //delete globals;
+        google::protobuf::ShutdownProtobufLibrary();
+	//delete globals;
         return 0;
 
     } catch (const LogCabin::Client::Exception& e) {

@@ -862,16 +862,16 @@ ClientImpl::writeLocal(const std::string& path,
     if (result.status != Status::OK)
         return result;
     Protocol::Client::ReadWriteTree::Request request;
-    *request.mutable_exactly_once() =
-        exactlyOnceRPCHelper.getRPCInfo(timeout);
+    //*request.mutable_exactly_once() =
+    //    exactlyOnceRPCHelper.getRPCInfo(timeout);
     setCondition(request, condition);
     request.mutable_write()->set_path(realPath);
     request.mutable_write()->set_contents(contents);
     Protocol::Client::ReadWriteTree::Response response;
     treeCall(*leaderRPC,
              request, response, timeout, globals);
-    if (response.status() != Protocol::Client::Status::OK)
-        return treeError(response);
+    //if (response.status() != Protocol::Client::Status::OK)
+    //    return treeError(response);
     return Result();
 }
 

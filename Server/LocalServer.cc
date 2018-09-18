@@ -145,8 +145,8 @@ class LocalServer {
                 globals->leaveSignalsBlocked();                
             }
 
-            google::protobuf::ShutdownProtobufLibrary();
-            return globals;
+            //google::protobuf::ShutdownProtobufLibrary();
+            //return globals;
 
         } catch (const Core::Config::Exception& e) {
             ERROR("Fatal exception from config file: %s",
