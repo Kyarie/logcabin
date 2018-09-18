@@ -217,14 +217,14 @@ treeCall(LeaderRPCBase& leaderRPC,
     Protocol::Client::StateMachineCommand::Response cresponse;
     *crequest.mutable_tree() = request;
     LeaderRPC::Status status;
-    if (request.exactly_once().client_id() == 0) {
+    /*if (request.exactly_once().client_id() == 0) {
         VERBOSE("Already timed out on establishing session for read-write "
                 "tree command");
         status = LeaderRPC::Status::TIMEOUT;
-    } else {
+    } else {*/
         status = leaderRPC.callLocal(Protocol::Client::OpCode::STATE_MACHINE_COMMAND,
                                 crequest, cresponse, timeout, globals);
-    }
+    //}
 
     switch (status) {
         case LeaderRPC::Status::OK:
@@ -862,8 +862,8 @@ ClientImpl::writeLocal(const std::string& path,
     if (result.status != Status::OK)
         return result;
     Protocol::Client::ReadWriteTree::Request request;
-    //*request.mutable_exactly_once() =
-    //    exactlyOnceRPCHelper.getRPCInfo(timeout);
+    *request.mutable_exactly_once() =
+        exactlyOnceRPCHelper.getRPCInfo(timeout);
     setCondition(request, condition);
     request.mutable_write()->set_path(realPath);
     request.mutable_write()->set_contents(contents);
