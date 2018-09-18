@@ -67,7 +67,7 @@ class ClientImpl {
     static TimePoint absTimeout(uint64_t relTimeoutNanos);
 
     /// Constructor.
-    explicit ClientImpl(Globals * globals,
+    explicit ClientImpl(std::make_shared<Globals> globals,
         const std::map<std::string, std::string>& options =
                             std::map<std::string, std::string>());
 
@@ -205,7 +205,7 @@ class ClientImpl {
      */
     Backoff sessionCreationBackoff;
 
-    Globals * globals;
+    std::make_shared<Globals> globals;
 
     /**
      * Describes the hosts in the cluster.

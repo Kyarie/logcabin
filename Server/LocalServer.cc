@@ -110,7 +110,7 @@ class LocalServer {
 
     LocalServer() { }
 
-    LogCabin::Server::Globals * init(std::string configFilename, bool bootstrap) {
+    void init(std::shared_ptr<LogCabin::Server::Globals> globals, std::string configFilename, bool bootstrap) {
         using namespace LogCabin;
 
         try {
@@ -122,7 +122,7 @@ class LocalServer {
             // Write PID file, removed upon destruction
             PidFile pidFile(pidFilename);
             pidFile.writePid(getpid());
-            Server::Globals * globals = new Server::Globals();
+            //Server::Globals * globals = new Server::Globals();
             // Initialize and run Globals.
             globals->config.readFile(configFilename.c_str());
 

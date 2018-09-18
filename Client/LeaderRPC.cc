@@ -210,20 +210,19 @@ LeaderRPC::Status LeaderRPC::callLocal(OpCode opCode,
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                LogCabin::Server::Globals * globals)
+                std::make_shared<LogCabin::Server::Globals> globals)
 {
-    while (true) {
-        LogCabin::RPC::OpaqueServerRPC opaqueRPC;
-        Core::ProtoBuf::serialize(request, opaqueRPC.request, sizeof(RequestHeaderVersion1));
 
-        //opaqueServerRPC.responseTarget = &rpcHandler.nextResponse;
-        LogCabin::RPC::ServerRPC serverRPC;
-        serverRPC.setRequestLocal(opCode, true, std::move(opaqueRPC));
-        //serverRPC.opaqueRPC = std::move(opaqueServerRPC);
-        //serverRPC.active = true;
-        globals->clientService->handleRPC(std::move(serverRPC));
-        return Status::OK;
-    }
+    LogCabin::RPC::OpaqueServerRPC opaqueRPC;
+    Core::ProtoBuf::serialize(request, opaqueRPC.request, sizeof(RequestHeaderVersion1));
+
+    //opaqueServerRPC.responseTarget = &rpcHandler.nextResponse;
+    LogCabin::RPC::ServerRPC serverRPC;
+    serverRPC.setRequestLocal(opCode, true, std::move(opaqueRPC));
+    //serverRPC.opaqueRPC = std::move(opaqueServerRPC);
+    //serverRPC.active = true;
+    globals->clientService->handleRPC(std::move(serverRPC));
+    return Status::OK;
 }
 
 std::unique_ptr<LeaderRPCBase::Call>

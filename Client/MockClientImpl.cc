@@ -116,7 +116,7 @@ class TreeLeaderRPC : public LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                Globals * globals) { 
+                std::make_shared<Globals> globals) { 
         return Status::OK;
     }
 

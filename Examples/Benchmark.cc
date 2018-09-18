@@ -283,8 +283,9 @@ main(int argc, char** argv)
         LogCabin::Client::Debug::setLogPolicy(
             LogCabin::Client::Debug::logPolicyFromString(
                 options.logPolicy));
+        std::shared_ptr<LogCabin::Server::Globals> globals = std::make_shared<LogCabin::Server::Globals>();
         LocalServer localServer = LocalServer();
-        LogCabin::Server::Globals * globals = localServer.init(options.configFilename, false);
+        localServer.init(globals, options.configFilename, false);
         std::thread serverThread(std::bind(&LogCabin::Server::Globals::run, globals));
         Cluster cluster = Cluster(options.cluster, globals);
         Tree tree = cluster.getTree();
@@ -321,7 +322,7 @@ main(int argc, char** argv)
                   << std::endl;
 
         serverThread.join();
-        delete globals;
+        //delete globals;
         return 0;
 
     } catch (const LogCabin::Client::Exception& e) {
