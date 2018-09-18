@@ -285,6 +285,7 @@ main(int argc, char** argv)
                 options.logPolicy));
         LocalServer localServer = LocalServer();
         LogCabin::Server::Globals * globals = localServer.init(options.configFilename, false);
+        std::thread serverThread(std::bind(&LogCabin::Server::Globals::run, globals));
         Cluster cluster = Cluster(options.cluster, globals);
         Tree tree = cluster.getTree();
 
@@ -319,6 +320,7 @@ main(int argc, char** argv)
                   << " objects"
                   << std::endl;
 
+        serverThread.join();
         delete globals;
         return 0;
 

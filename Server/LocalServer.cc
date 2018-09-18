@@ -142,8 +142,7 @@ class LocalServer {
                 globals->raft->bootstrapConfiguration();
                 NOTICE("Done bootstrapping configuration. Exiting.");
             } else {
-                globals->leaveSignalsBlocked();
-                std::thread serverThread(std::bind(&LogCabin::Server::Globals::run, globals));
+                globals->leaveSignalsBlocked();                
             }
 
             google::protobuf::ShutdownProtobufLibrary();
