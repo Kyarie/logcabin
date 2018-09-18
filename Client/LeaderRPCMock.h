@@ -65,7 +65,7 @@ class LeaderRPCMock : public LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                std::make_shared<Globals> globals);
+                std::shared_ptr<Globals> globals);
 
 
     /// See LeaderRPCBase::makeCall.

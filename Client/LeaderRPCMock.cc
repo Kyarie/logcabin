@@ -69,7 +69,7 @@ LeaderRPCMock::callLocal(OpCode opCode,
             const google::protobuf::Message& request,
             google::protobuf::Message& response,
             TimePoint timeout,
-            std::make_shared<LogCabin::Server::Globals> globals) { 
+            std::shared_ptr<LogCabin::Server::Globals> globals) { 
     return Status::OK;
 }
 

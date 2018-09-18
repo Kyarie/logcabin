@@ -130,7 +130,7 @@ class LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                std::make_shared<Globals> globals) = 0;
+                std::shared_ptr<Globals> globals) = 0;
 
     /**
      * An asynchronous version of call(). This allows multiple RPCs to be
@@ -266,7 +266,7 @@ class LeaderRPC : public LeaderRPCBase {
                 const google::protobuf::Message& request,
                 google::protobuf::Message& response,
                 TimePoint timeout,
-                std::make_shared<Globals> globals);
+                std::shared_ptr<Globals> globals);
 
     /// See LeaderRPCBase::makeCall().
     std::unique_ptr<LeaderRPCBase::Call> makeCall();
